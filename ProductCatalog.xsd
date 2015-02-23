@@ -87,15 +87,16 @@
 			<xs:element name="Tents" type="xs:string"/>
 			<xs:element name="Sleeping Bags" type="xs:string"/>
 			<xs:element name="Sleeping Pads" type="xs:string"/>
+			<xs:element name="Hammocks" type="xs:string"/>
 			<xs:element name="Packs" type="xs:string"/>
 			<xs:element name="Tools & Knives" type="xs:string"/>
 			<xs:element name="Cooking Supplies" type="xs:string"/>
-			<xs:element name="Hydration" type="xs:string"/>
 			<xs:element name="Camp Food" type="xs:string"/>
+			<xs:element name="Hydration" type="xs:string"/>
 			<xs:element name="Lighting" type="xs:string"/>
 			<xs:element name="Hiking Poles" type="xs:string"/>
-			<xs:element name="Hammocks" type="xs:string"/>
 			<xs:element name="Navigation" type="xs:string"/>
+			<xs:element name="Survival" type="xs:string"/>
 			<xs:element name="Accessories" type="xs:string"/>
 		</xs:element>
 
@@ -143,13 +144,18 @@
 			<xs:element name="Accessories" type="xs:string"/>
 		</xs:element>
 
+		<xs:element name="Diving" type="xs:string">
+			<xs:element name="Scuba" type="xs:string"/>
+			<xs:element name="Fins" type="xs:string"/>
+			<xs:element name="Accessories" type="xs:string"/>
+		</xs:element>
+
 		<xs:element name="Travel" type="xs:string">
 			<xs:element name="Bags" type="xs:string"/>
 			<xs:element name="Luggage" type="xs:string"/>
 			<xs:element name="Racks" type="xs:string"/>
 			<xs:element name="Containers" type="xs:string"/>
-			<xs:element name="Pouches" type="xs:string"/>
-			<xs:element name="Locks" type="xs:string"/>
+			<xs:element name="Navigation" type="xs:string"/>
 			<xs:element name="Accessories" type="xs:string"/>
 		</xs:element>
 
@@ -163,11 +169,13 @@
 				<xs:element name="DVDs" type="xs:string"/>
 				<xs:element name="Magazines" type="xs:string"/>
 			</xs:element>
-			<xs:element name="Cameras" type="xs:string"/>
-			<xs:element name="Binoculars & Scopes" type="xs:string"/>
-			<xs:element name="Watches" type="xs:string"/>
-			<xs:element name="Headphones & Speakers" type="xs:string"/>
-			<xs:element name="Phone Accessories" type="xs:string"/>
+			<xs:element name "Tech" type="xs:string">
+				<xs:element name="Cameras" type="xs:string"/>
+				<xs:element name="Audio" type="xs:string"/>
+				<xs:element name="Phone Accessories" type="xs:string"/>
+				<xs:element name="Binoculars & Scopes" type="xs:string"/>
+				<xs:element name="Watches" type="xs:string"/>
+			</xs:element>
 			<xs:element name="Yoga" type="xs:string"/>
 			<xs:element name="Food" type="xs:string"/>
 		</xs:element>
