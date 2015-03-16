@@ -584,55 +584,55 @@
 	"LEB" : [
 		true,
 		"Alpine Boots",
-		"Equipment > Ski > Alpine > Boots",
+		"Equipment > Winter Sports > Downhill Ski > Boots",
 		"Sporting Goods > Winter Sports > Skiing > Ski Boots > Downhill Ski Boots"
 		],
 	"LEI" : [
 		true,
 		"Alpine Bindings",
-		"Equipment > Ski > Alpine > Bindings",
+		"Equipment > Winter Sports > Downhill Ski > Bindings",
 		"Sporting Goods > Winter Sports > Skiing > Ski Bindings > Downhill Ski Bindings"
 		],
 	"LEP" : [
 		true,
 		"Alpine Poles",
-		"Equipment > Ski > Alpine > Poles",
+		"Equipment > Winter Sports > Downhill Ski > Poles",
 		"Sporting Goods > Winter Sports > Skiing > Ski Poles"
 		],
 	"LER" : [
 		true,
 		"Skiboards",
-		"Equipment > Ski > Skiboards",
+		"Equipment > Winter Sports > Skiboards",
 		"Sporting Goods > Winter Sports > Skiing"
 		],
 	"LES" : [
 		true,
 		"Alpine Skis",
-		"Equipment > Ski > Alpine > Skis",
+		"Equipment > Winter Sports > Downhill Ski > Skis",
 		"Sporting Goods > Winter Sports > Skiing > Skis > Downhill Skis"
 		],
 	"NEA" : [
 		true,
 		"Snowboard Accessories",
-		"Equipment > Snowboard > Accessories",
+		"Equipment > Winter Sports > Snowboard > Accessories",
 		"Sporting Goods > Winter Sports > Snowboarding"
 		],
 	"NEB" : [
 		true,
 		"Snowboard Boots",
-		"Equipment > Snowboard > Boots",
+		"Equipment > Winter Sports > Snowboard > Boots",
 		"Sporting Goods > Winter Sports > Snowboarding > Snowboard Boots"
 		],
 	"NEI" : [
 		true,
 		"Snowboard Bindings",
-		"Equipment > Snowboard > Bindings",
+		"Equipment > Winter Sports > Snowboard > Bindings",
 		"Sporting Goods > Winter Sports > Snowboarding > Snowboard Bindings"
 		],
 	"NES" : [
 		true,
 		"Snowboards",
-		"Equipment > Snowboard > Boards",
+		"Equipment > Winter Sports > Snowboard > Boards",
 		"Sporting Goods > Winter Sports > Snowboarding > Snowboards"
 		],
 	"PBA" : [
@@ -650,61 +650,61 @@
 	"REA" : [
 		true,
 		"XC Accessories",
-		"Equipment > Ski > Accessories",
+		"Equipment > Winter Sports > Accessories",
 		"Sporting Goods > Winter Sports > Skiing"
 		],
 	"REB" : [
 		true,
 		"XC Boots",
-		"Equipment > Ski > Nordic > Boots",
+		"Equipment > Winter Sports > Crosscountry Ski > Boots",
 		"Sporting Goods > Winter Sports > Skiing > Ski Boots > Cross-Country Ski Boots"
 		],
 	"REI" : [
 		true,
 		"XC Bindings",
-		"Equipment > Ski > Nordic > Bindings",
+		"Equipment > Winter Sports > Crosscountry Ski > Bindings",
 		"Sporting Goods > Winter Sports > Skiing > Ski Bindings > Cross-Country Ski Bindings"
 		],
 	"REO" : [
 		true,
 		"Snowshoes",
-		"Equipment > Snowshoe > ?",
+		"Equipment > Winter Sports > Snowshoe",
 		"Sporting Goods > Winter Sports > Snowshoeing > ?"
 		],
 	"REP" : [
 		true,
 		"XC Poles",
-		"Equipment > Ski > Nordic > Poles",
+		"Equipment > Winter Sports > Crosscountry Ski > Poles",
 		"Sporting Goods > Winter Sports > Skiing > Ski Poles"
 		],
 	"RES" : [
 		true,
 		"XC Skis",
-		"Equipment > Ski > Nordic > Skis",
+		"Equipment > Winter Sports > Crosscountry Ski > Skis",
 		"Sporting Goods > Winter Sports > Skiing > Skis > Cross-Country Skis"
 		],
 	"SEA" : [
 		true,
 		"Ski Accessories",
-		"Equipment > Ski > Accessories",
+		"Equipment > Winter Sports > Accessories",
 		"Sporting Goods > Winter Sports > Skiing"
 		],
 	"SEG" : [
 		true,
 		"Goggles",
-		[ "Equipment > Snowboard > Goggles", "Equipment > Ski > Goggles" ],
+		"Equipment > Winter Sports > Goggles",
 		"Sporting Goods > Winter Sports > Skiing > Ski & Snowboard Goggles"
 		],
 	"SEH" : [
 		true,
 		"Ski Helmets",
-		[ "Equipment > Snowboard > Safety", "Equipment > Ski > Safety" ],
+		"Equipment > Winter Sports > Safety",
 		"Sporting Goods > Winter Sports > Skiing > Ski & Snowboard Helmets"
 		],
 	"SEL" : [
 		true,
 		"Ski Luggage",
-		[ "Equipment > Snowboard > Transportation", "Equipment > Ski > Transportation" ],
+		"Equipment > Winter Sports > Packs & Racks",
 		"Sporting Goods > Winter Sports > Skiing > Ski & Snowboard Bags"
 		],
 	"THB" : [
@@ -728,7 +728,7 @@
 		"Sunglasses",
 		],
 	"THW" : [
-		true,
+		false,
 		"Watches",
 		],
 	"WWW" : [
@@ -740,7 +740,7 @@
 		"Boy Scouts",
 		],
 	"YZC" : [
-		true,
+		false,
 		"Camp Food",
 		],
 	"YZM" : [
