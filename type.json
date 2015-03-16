@@ -5,10 +5,7 @@
 		shop category : string|array|NULL,
 		Google shop category : string|NULL
 		]
-		
-	RegEx
-		^\t\t\x22([A-Za-z '&>]+)\t
-		\t\t\x22(\1 > )
+
 */
 
 {
@@ -713,38 +710,26 @@
 	"THB" : [
 		false,
 		"Books Plus",
-		"",
-		""
 		],
 	"THD" : [
 		false,
 		"Discs/Toys",
-		"",
-		""
 		],
 	"THG" : [
 		false,
 		"Gifts",
-		"",
-		""
 		],
 	"THP" : [
-		true,
+		false,
 		"Printed Tees",
-		"",
-		""
 		],
 	"THS" : [
-		true,
+		false,
 		"Sunglasses",
-		"",
-		""
 		],
 	"THW" : [
 		true,
 		"Watches",
-		"",
-		""
 		],
 	"WWW" : [
 		false,
@@ -757,8 +742,6 @@
 	"YZC" : [
 		true,
 		"Camp Food",
-		"",
-		""
 		],
 	"YZM" : [
 		false,
@@ -799,8 +782,6 @@
 	"ZRV" : [
 		false,
 		"Video/DVD",
-		"",
-		""
 		],
 	"ZRX" : [
 		false,
@@ -813,14 +794,10 @@
 	"ZZI" : [
 		false,
 		"Inline",
-		"",
-		""
 		],
 	"ZZM" : [
 		false,
 		"Misc",
-		"",
-		""
 		],
 	"ZZS" : [
 		false,
