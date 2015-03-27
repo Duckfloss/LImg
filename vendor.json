@@ -1,4 +1,5 @@
 var vendor = [
+
 	{ "180" : "180S" },
 	{ "32N" : "32North" },
 	{ "3PY" : "3 Play" },
@@ -292,8 +293,8 @@ var vendor = [
 	{ "HOB" : "Hobie Cat" },
 	{ "HOC" : "Hot Chillys" },
 	{ "HOG" : "Hog Wild" },
-	{ "HOM" : "House Of Marbles" },
-	{ "HOR" : "Toad&Co" },
+	{ "HOM" : "House of Marbles" },
+	{ "HOR" : "Toad & Co." },
 	{ "HOT" : "Hotronic USA, Inc." },
 	{ "HRI" : "Housing Resources, Inc." },
 	{ "HRN" : "Harken" },
@@ -745,4 +746,5 @@ var vendor = [
 	{ "ZOS" : "Zosma Publish" },
 	{ "ZRE" : "Zaveral Racing Equipment" },
 	{ "ZST" : "Zamst" }
+
 ];
