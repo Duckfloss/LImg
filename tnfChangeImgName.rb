@@ -43,7 +43,7 @@ def rename_test(file, item)
 	else
 		name = "#{item['Style SID']}.jpg"
 	end
-	puts "#{file} becomes #{name}"
+	puts "#{file} --> #{name}"
 end
 
 csv_data.each do |item|
@@ -60,7 +60,7 @@ csv_data.each do |item|
 		if file.nil?
 			puts "Failure with file #{style}"
 		else
-			rename_test(file, item)
+			rename_file(file, item)
 		end
 	end
 end
