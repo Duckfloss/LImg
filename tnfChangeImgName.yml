@@ -5,5 +5,5 @@ windows:
   img_dir : "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets/"
 
 mac:
-  csv_file : "/Users/benjones/Documents/Projects/Lees/Git/Lees/Book1.csv"
-  img_dir : "/Users/benjones/Documents/Projects/Lees/Git/Lees/imgs/"
+  csv_file : "/Users/benjones/Documents/Projects/Lees/Scripts/Lees/Book1.csv"
+  img_dir : "/Users/benjones/Documents/Projects/Lees/Scripts/Lees/imgs/"

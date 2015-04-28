@@ -15,18 +15,25 @@ img_files = Dir.glob('*.jpg')
 #img_files.reject! { |item| item !~ /\.jpg$/ }
 
 #map csv to hashes
-csv_data = CSV.read(csv_file, :headers => true).map { |a| Hash[ (a) ] }
+#csv_data = CSV.read(csv_file, :headers => true).map { |a| Hash[ (a) ] }
+csv_data = []
+CSV.foreach(csv_file, :headers => true) do |row|
+	hsh = {}
+  row.to_hash.each_pair do |k,v|
+		csv_data << hsh.merge!({k.downcase => v})
+  end
+end
 
-#and discard all with duplicate Desc 2 fields
-csv_data.uniq! { |s| s["Desc 2"] }
+#and discard all with duplicate desc 2 fields
+csv_data.uniq! { |s| s["desc 2"] }
 
 def rename_file(file, item)
-	if item["Color"]
-		color = "_"+item["Color"].downcase #downcase color name
+	if item["color"]
+		color = "_"+item["color"].downcase #downcase color name
 		color.gsub!(/[\ \/]/, '_') #replace spaces and slashes with underscores
-		name = "#{item['Style SID']}#{color}.jpg"
+		name = "#{item['style sid']}#{color}.jpg"
 	else
-		name = "#{item['Style SID']}.jpg"
+		name = "#{item['style sid']}.jpg"
 	end
 	if File.rename($img_dir+file, $img_dir+name)
 #		puts name
@@ -36,31 +43,31 @@ def rename_file(file, item)
 end
 
 def rename_test(file, item)
-	if item["Color"]
-		color = "_"+item["Color"].downcase #downcase color name
+	if item["color"]
+		color = "_"+item["color"].downcase #downcase color name
 		color.gsub!(/[\ \/]/, '_') #replace spaces and slashes with underscores
-		name = "#{item['Style SID']}#{color}.jpg"
+		name = "#{item['style sid']}#{color}.jpg"
 	else
-		name = "#{item['Style SID']}.jpg"
+		name = "#{item['style sid']}.jpg"
 	end
 	puts "#{file} --> #{name}"
 end
 
 csv_data.each do |item|
-	style = item["Desc 2"]
+	style = item["desc 2"]
 	if style.length > 4
 		style.gsub!(/[\ \-\/\\]/, "_") #replace space, slash, dash with underscore
 		file = Dir.glob("*#{style}*")
 		if file[0].nil?
 			puts "Failure with file #{style}"
 		else
-			rename_file(file[0], item)
+			rename_test(file[0], item)
 		end
 	else
 		if file.nil?
 			puts "Failure with file #{style}"
 		else
-			rename_file(file, item)
+			rename_test(file, item)
 		end
 	end
 end
