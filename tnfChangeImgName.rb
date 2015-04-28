@@ -1,11 +1,11 @@
 #!/ruby200/bin
 
-require "csv"
+require 'csv'
 require 'yaml'
 
 #settings for mac and windows
-os = "mac"
 settings = YAML::load_file "tnfChangeImgName.yml"
+os = settings["os"]
 csv_file = settings[os]["csv_file"]
 $img_dir = settings[os]["img_dir"]
 Dir.chdir($img_dir) #change to the img directory
