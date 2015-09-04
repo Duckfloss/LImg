@@ -1,30 +1,60 @@
 
 # This goes through a CSV of two columns
-# code and color
+# Shorthand and Color
 # compares code to ECI map and adds
 # it if necessary
 
 
 require 'csv'
 
-$csv_file = "C:/Documents and Settings/pos/desktop/converttable.csv"
+$csv = "C:/Documents and Settings/pos/desktop/converttable.csv"
 
-$img_dir = "R:/RETAIL/IMAGES/4Web"
+$ECImap = "data/ECImap.ini"
 
-Dir.chdir($img_dir)
-$replace = { " " => "_", "/" => "_","-" => "_" }
-$converter = Hash.new
+def build_converter(csv)
+	# Build the converter
+	$converter = Hash.new
+	csv_data = CSV.read(csv, :headers=>true,:skip_blanks=>true,:header_converters=>:symbol)
+	csv_data.each do |row|
+		$converter[row[:shorthand]] = row[:color]
+	end
+end
+
+def build_map(ini)
+	$map = Hash.new
+	if File.exist?(ini)
+		file = File.open(ini)
+		while line = file.gets
+			$map["#{line.match(/(?<=\>).+(?=\=)/)}"] = "#{line.match(/(?<=\=).+/)}"
+		end
+		file.close if !file.closed?
+	end
+end
+
 
 def main
-no=0
-	# Build the converter
-	csv_data = CSV.read($csv_file, :headers=>true,:skip_blanks=>true,:header_converters=>:symbol)
-	csv_data.each do |row|
-		# Fix color name
-		color = row[:color].downcase.gsub(/[\/ -]/,$replace)
-		$converter[row[:code].gsub!("-","_")] = { :pf_id => "#{row[:pf_id]}", :color => "#{color}"}
+	build_converter($csv)
+	build_map($ECImap)
+	no=0
+	$converter.each do |k,v|
+		if !$map[k].nil?
+			if $map[k].length < 1 || $map[k] != v
+				$map["#{k}"] = v
+			end
+		else
+			$map["#{k}"] = v
+		end
+	end
+
+	hashout = $map.sort_by{|k,v| k.downcase}
+	File.open($ECImap,"w") do |file|
+		hashout.each do |k,v|
+			file.puts "ATTR<_as_>#{k}=#{v}"
+		end
 	end
 	
+
+=begin
 	files = Dir.entries($img_dir)
 	files.each do |file|
 		if file=~/\.jpg/
@@ -41,6 +71,7 @@ no=0
 			end
 		end
 	end
+=end
 end
 
 
