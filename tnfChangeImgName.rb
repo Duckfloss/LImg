@@ -4,7 +4,7 @@ require 'csv'
 require 'yaml'
 
 #settings for mac and windows
-settings = YAML::load_file "tnfChangeImgName.yml"
+settings = YAML::load_file "settings/tnfChangeImgName.yml"
 os = settings["os"]
 csv_file = settings[os]["csv_file"]
 $img_dir = settings[os]["img_dir"]
