@@ -1,4 +1,4 @@
-os : "mac"
+os : "windows"
 
 windows:
   csv_file : "C:/Documents and Settings/pos/Desktop/Book1.csv"

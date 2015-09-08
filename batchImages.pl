@@ -78,6 +78,9 @@ sub main {
 		warn "$x" if "$x";
 		$x = $image->Write("$dest/$fh\_med.jpg");
 		warn "$x" if "$x";
+		#outputs something we can manually make into a swatch
+		$x = $image->Write("$dest/$fh\_sw.jpg");
+		warn "$x" if "$x";
 
 		#save thumbnail
 		$x = $image->Sample(geometry=>$t."x".$t);
