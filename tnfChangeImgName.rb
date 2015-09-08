@@ -61,13 +61,13 @@ csv_data.each do |item|
 		if file[0].nil?
 			puts "Failure with file #{style}"
 		else
-			rename_test(file[0], item)
+			rename_file(file[0], item)
 		end
 	else
 		if file.nil?
 			puts "Failure with file #{style}"
 		else
-			rename_test(file, item)
+			rename_file(file, item)
 		end
 	end
 end
