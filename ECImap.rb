@@ -24,7 +24,7 @@ def build_map(ini)
 	$map = Hash.new
 	if File.exist?(ini)
 		file = File.open(ini)
-		while line = file.gets
+		while line = file.gets do
 			$map["#{line.match(/(?<=\>).+(?=\=)/)}"] = "#{line.match(/(?<=\=).+/)}"
 		end
 		file.close if !file.closed?
@@ -52,7 +52,7 @@ def main
 			file.puts "ATTR<_as_>#{k}=#{v}"
 		end
 	end
-	
+
 
 =begin
 	files = Dir.entries($img_dir)
