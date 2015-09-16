@@ -1,0 +1,31 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Customers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Customer" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="fldCustSID" use="optional"/>
+                <xs:attribute type="xs:string" name="fldFName" use="optional"/>
+                <xs:attribute type="xs:string" name="fldLName" use="optional"/>
+                <xs:attribute type="xs:string" name="fldAddr1" use="optional"/>
+                <xs:attribute type="xs:string" name="fldAddr3" use="optional"/>
+                <xs:attribute type="xs:string" name="fldZIP" use="optional"/>
+                <xs:attribute type="xs:string" name="fldPhone1" use="optional"/>
+                <xs:attribute type="xs:int" name="fldCustID" use="optional"/>
+                <xs:attribute type="xs:string" name="web_cust_sid" use="optional"/>
+                <xs:attribute type="xs:string" name="email" use="optional"/>
+                <xs:attribute type="xs:string" name="fldCompany" use="optional"/>
+                <xs:attribute type="xs:string" name="fldAddr2" use="optional"/>
+                <xs:attribute type="xs:string" name="fldPhone2" use="optional"/>
+                <xs:attribute type="xs:string" name="fldTitle" use="optional"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:float" name="Version"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

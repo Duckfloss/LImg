@@ -1,0 +1,127 @@
+
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SALEORDERS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SO" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SO_HEADER">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="order_sid" use="optional"/>
+                      <xs:attribute type="xs:short" name="so_number" use="optional"/>
+                      <xs:attribute type="xs:string" name="date_ordered" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_cust_sid" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_title" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_first_name" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_last_name" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_address1" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_address2" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_city" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_state_or_province" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_state_short" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_country" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_country_short" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_postal_code" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_phone1" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_phone2" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_company" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_email" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_language" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_billto_price_level" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_date_created" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_title" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_first_name" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_last_name" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_address1" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_address2" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_city" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_state_or_province" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_state_short" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_country" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_country_short" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_postal_code" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_phone1" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_phone2" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_company" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_email" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_language" use="optional"/>
+                      <xs:attribute type="xs:string" name="so_shipto_price_level" use="optional"/>
+                      <xs:attribute type="xs:string" name="shipping_provider" use="optional"/>
+                      <xs:attribute type="xs:string" name="shipping_method" use="optional"/>
+                      <xs:attribute type="xs:string" name="cc_type" use="optional"/>
+                      <xs:attribute type="xs:string" name="cc_name" use="optional"/>
+                      <xs:attribute type="xs:string" name="cc_number" use="optional"/>
+                      <xs:attribute type="xs:string" name="cc_expire" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SO_ITEM">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:short" name="item_sid" use="optional"/>
+                      <xs:attribute type="xs:short" name="item_no" use="optional"/>
+                      <xs:attribute type="xs:byte" name="row_num" use="optional"/>
+                      <xs:attribute type="xs:string" name="dcs" use="optional"/>
+                      <xs:attribute type="xs:string" name="vc" use="optional"/>
+                      <xs:attribute type="xs:string" name="desc1" use="optional"/>
+                      <xs:attribute type="xs:string" name="desc2" use="optional"/>
+                      <xs:attribute type="xs:byte" name="tax_code" use="optional"/>
+                      <xs:attribute type="xs:string" name="attr" use="optional"/>
+                      <xs:attribute type="xs:string" name="size" use="optional"/>
+                      <xs:attribute type="xs:string" name="misc1" use="optional"/>
+                      <xs:attribute type="xs:string" name="misc2" use="optional"/>
+                      <xs:attribute type="xs:string" name="misc3" use="optional"/>
+                      <xs:attribute type="xs:string" name="misc4" use="optional"/>
+                      <xs:attribute type="xs:string" name="decimals" use="optional"/>
+                      <xs:attribute type="xs:short" name="price" use="optional"/>
+                      <xs:attribute type="xs:float" name="cost" use="optional"/>
+                      <xs:attribute type="xs:short" name="orig_price" use="optional"/>
+                      <xs:attribute type="xs:byte" name="qty_ordered" use="optional"/>
+                      <xs:attribute type="xs:byte" name="tax_amount" use="optional"/>
+                      <xs:attribute type="xs:string" name="orig_tax_amount" use="optional"/>
+                      <xs:attribute type="xs:byte" name="tax_percent" use="optional"/>
+                      <xs:attribute type="xs:string" name="upc" use="optional"/>
+                      <xs:attribute type="xs:string" name="alu" use="optional"/>
+                      <xs:attribute type="xs:string" name="case_qty" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SO_SUBTOTALS">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:byte" name="disc_percent" use="optional"/>
+                      <xs:attribute type="xs:byte" name="ship_percent" use="optional"/>
+                      <xs:attribute type="xs:byte" name="disc_amount" use="optional"/>
+                      <xs:attribute type="xs:byte" name="ship_amount" use="optional"/>
+                      <xs:attribute type="xs:byte" name="handling_amount" use="optional"/>
+                      <xs:attribute type="xs:byte" name="total_tax" use="optional"/>
+                      <xs:attribute type="xs:short" name="subtotal_used" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SO_INSTRUCTION">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="instruction" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

@@ -1,0 +1,68 @@
+
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SALEORDERS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SO" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType mixed="true">
+            <xs:sequence>
+              <xs:element name="SO_ITEM" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:int" name="Number" use="optional"/>
+                      <xs:attribute type="xs:string" name="SID" use="optional"/>
+                      <xs:attribute type="xs:float" name="QtyShipped" use="optional"/>
+                      <xs:attribute type="xs:string" name="ShipDate" use="optional"/>
+                      <xs:attribute type="xs:string" name="ShipNumber" use="optional"/>
+                      <xs:attribute type="xs:string" name="ShipDescript" use="optional"/>
+                      <xs:attribute type="xs:string" name="ShipProvider" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="RECEIPT" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="RECEIPT_ITEM">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:int" name="Number" use="optional"/>
+                            <xs:attribute type="xs:string" name="SID" use="optional"/>
+                            <xs:attribute type="xs:float" name="Qty" use="optional"/>
+                            <xs:attribute type="xs:float" name="ExtPrc" use="optional"/>
+                            <xs:attribute type="xs:float" name="ExtPWT" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:short" name="Number" use="optional"/>
+                  <xs:attribute type="xs:string" name="SID" use="optional"/>
+                  <xs:attribute type="xs:byte" name="StoreStation" use="optional"/>
+                  <xs:attribute type="xs:string" name="Date" use="optional"/>
+                  <xs:attribute type="xs:float" name="Subtotal" use="optional"/>
+                  <xs:attribute type="xs:float" name="ShipAmount" use="optional"/>
+                  <xs:attribute type="xs:float" name="FeeAmount" use="optional"/>
+                  <xs:attribute type="xs:string" name="TaxArea" use="optional"/>
+                  <xs:attribute type="xs:float" name="TotalTax" use="optional"/>
+                  <xs:attribute type="xs:float" name="Total" use="optional"/>
+                  <xs:attribute type="xs:byte" name="ReceiptType" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:int" name="Number" use="optional"/>
+            <xs:attribute type="xs:string" name="SID" use="optional"/>
+            <xs:attribute type="xs:byte" name="Status" use="optional"/>
+            <xs:attribute type="xs:float" name="Total" use="optional"/>
+            <xs:attribute type="xs:byte" name="CaptureFund" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:float" name="Version"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

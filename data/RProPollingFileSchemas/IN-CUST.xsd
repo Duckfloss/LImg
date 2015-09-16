@@ -1,0 +1,32 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Customers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Customer" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="cust_sid" use="optional"/>
+                <xs:attribute type="xs:string" name="first_name" use="optional"/>
+                <xs:attribute type="xs:string" name="last_name" use="optional"/>
+                <xs:attribute type="xs:string" name="company_name" use="optional"/>
+                <xs:attribute type="xs:string" name="address1" use="optional"/>
+                <xs:attribute type="xs:string" name="address2" use="optional"/>
+                <xs:attribute type="xs:string" name="city" use="optional"/>
+                <xs:attribute type="xs:string" name="region_code" use="optional"/>
+                <xs:attribute type="xs:string" name="country_code" use="optional"/>
+                <xs:attribute type="xs:string" name="postal_code" use="optional"/>
+                <xs:attribute type="xs:string" name="phone1" use="optional"/>
+                <xs:attribute type="xs:string" name="email" use="optional"/>
+                <xs:attribute type="xs:string" name="login_id" use="optional"/>
+                <xs:attribute type="xs:string" name="rpro_cust_sid" use="optional"/>
+                <xs:attribute type="xs:string" name="password" use="optional"/>
+                <xs:attribute type="xs:byte" name="has_so" use="optional"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,79 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Inventory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Style" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Item" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Price">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:byte" name="Level" use="optional"/>
+                            <xs:attribute type="xs:float" name="Value" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:int" name="fldItemNum" use="optional"/>
+                  <xs:attribute type="xs:string" name="fldItemSID" use="optional"/>
+                  <xs:attribute type="xs:string" name="fldALU" use="optional"/>
+                  <xs:attribute type="xs:byte" name="fldTotOnHnd" use="optional"/>
+                  <xs:attribute type="xs:float" name="fldCost" use="optional"/>
+                  <xs:attribute type="xs:string" name="fldAttr" use="optional"/>
+                  <xs:attribute type="xs:string" name="fldUDF0" use="optional"/>
+                  <xs:attribute type="xs:string" name="fldSize" use="optional"/>
+                  <xs:attribute type="xs:byte" name="AvailQuantity" use="optional"/>
+                  <xs:attribute type="xs:byte" name="Availability" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="fldStyleSID" use="optional"/>
+            <xs:attribute type="xs:string" name="fldDCS" use="optional"/>
+            <xs:attribute type="xs:string" name="fldDCSName" use="optional"/>
+            <xs:attribute type="xs:string" name="fldVendorCode" use="optional"/>
+            <xs:attribute type="xs:string" name="fldDesc1" use="optional"/>
+            <xs:attribute type="xs:string" name="fldDesc2" use="optional"/>
+            <xs:attribute type="xs:string" name="fldStyleName" use="optional"/>
+            <xs:attribute type="xs:string" name="fldStyleLongDesc" use="optional"/>
+            <xs:attribute type="xs:byte" name="fldAvailAtStore" use="optional"/>
+            <xs:attribute type="xs:string" name="fldInStockMsg" use="optional"/>
+            <xs:attribute type="xs:string" name="fldOutStockMsg" use="optional"/>
+            <xs:attribute type="xs:string" name="fldTaxCd" use="optional"/>
+            <xs:attribute type="xs:byte" name="fldAvailThreshold" use="optional"/>
+            <xs:attribute type="xs:string" name="fldVendor" use="optional"/>
+            <xs:attribute type="xs:byte" name="fldInStockMsg_i" use="optional"/>
+            <xs:attribute type="xs:byte" name="fldTaxCd_i" use="optional"/>
+            <xs:attribute type="xs:string" name="fldStylePicture" use="optional"/>
+            <xs:attribute type="xs:string" name="fldStyleThumbnail" use="optional"/>
+            <xs:attribute type="xs:string" name="fldAvailDateFormat" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Style_Avail" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Item_Avail" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:int" name="fldItemNum" use="optional"/>
+                      <xs:attribute type="xs:string" name="fldItemSID" use="optional"/>
+                      <xs:attribute type="xs:byte" name="AvailQuantity" use="optional"/>
+                      <xs:attribute type="xs:byte" name="Availability" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="fldStyleSID" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:float" name="Version"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
