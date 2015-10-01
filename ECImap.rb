@@ -1,6 +1,6 @@
 
 # This goes through a CSV of two columns
-# Shorthand and Color
+# Attr and Color
 # compares code to ECI map and adds
 # it if necessary
 
@@ -16,7 +16,7 @@ def build_converter(csv)
 	$converter = Hash.new
 	csv_data = CSV.read(csv, :headers=>true,:skip_blanks=>true,:header_converters=>:symbol)
 	csv_data.each do |row|
-		$converter[row[:shorthand]] = row[:color]
+		$converter[row[:attr]] = row[:color]
 	end
 end
 
