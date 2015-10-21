@@ -5,8 +5,10 @@
 #		* x_lg.jpg (1050px/1050px)
 #		* x_med.jpg (350px/350px)
 #		* x_t.jpg (100px/100px)
+#		* x_sw.jpg (350px/350px)**
 #	saved in another folder (see $dest)
 #	
+#	**the swatch has to be manually chopped down to 25x25px
 #	requires ImageMagick and PerlMagick be installed
 
 
@@ -46,6 +48,10 @@ sub main {
 
 		#set to 72ppi resolution
 		$x = $image->Set(density=>'72x72');
+		warn "$x" if "$x";
+		
+		#set color profile to RGB
+		$x = $image->Quantize(colorspace=>'RGB');
 		warn "$x" if "$x";
 
 		#get width/height, ratio and reverse-ratio
