@@ -2,11 +2,14 @@
 #
 #	This fantastic little script takes all the image files
 #	in one folder (see $source) and hacks 'em up into:
-#		* x_lg.jpg (1050px/1050px)
-#		* x_med.jpg (350px/350px)
-#		* x_t.jpg (100px/100px)
-#		* x_sw.jpg (350px/350px)**
-#	saved in another folder (see $dest)
+#		FOR UPLOADS
+#		* {image}_lg.jpg (1050px/1050px)
+#		* {image}_med.jpg (350px/350px)
+#		* {image}_sw.jpg (350px/350px)**
+#		FOR ECI
+#		* {image}.jpg (350px/350px)
+#		* {image}t.jpg (100px/100px)
+#	saved in another folder (see $dest and $eci)
 #	
 #	**the swatch has to be manually chopped down to 25x25px
 #	requires ImageMagick and PerlMagick be installed
@@ -19,6 +22,7 @@ use File::Basename;
 
 my $source = "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets";
 my $dest = "R:/RETAIL/IMAGES/4Web";
+my $eci = "R:/RETAIL/RPRO/Images/Inven";
 my $dir = $source;
 my @files;
 my $lg = 1050;
@@ -84,6 +88,9 @@ sub main {
 		warn "$x" if "$x";
 		$x = $image->Write("$dest/$fh\_med.jpg");
 		warn "$x" if "$x";
+		#save to eci
+		$x = $image->Write("$eci/$fh".".jpg");
+		warn "$x" if "$x";
 		#outputs something we can manually make into a swatch
 		$x = $image->Write("$dest/$fh\_sw.jpg");
 		warn "$x" if "$x";
@@ -91,7 +98,7 @@ sub main {
 		#save thumbnail
 		$x = $image->Sample(geometry=>$t."x".$t);
 		warn "$x" if "$x";
-		$x = $image->Write("$dest/$fh\_t.jpg");
+		$x = $image->Write("$eci/$fh"."t.jpg");
 		warn "$x" if "$x";
 	}
 }
