@@ -4,6 +4,8 @@
 #	in one folder (see $source) and hacks 'em up into:
 #		FOR UPLOADS
 #		* {image}_lg.jpg (1050px/1050px)
+#		* {image}_lg.jpg (1050px/1050px)
+#				- (without attribute because of MerchantAdvantage's dumb ass)
 #		* {image}_med.jpg (350px/350px)
 #		* {image}_sw.jpg (350px/350px)**
 #		FOR ECI
@@ -45,6 +47,7 @@ sub main {
 		my $path = $dir."/".$_;
 		#get filename sans extension
 		my $fh = fileparse($_, qr/\.[^.]*/);
+		my $fhbase = substr $fh, 0, 16;
 
 		#open file
 		$image = Image::Magick->new;
@@ -82,6 +85,9 @@ sub main {
 		#save large
 		$x = $image->Write("$dest/$fh\_lg.jpg");
 		warn "$x" if "$x";
+		#save another large because of Merchant Advantage (dumb ass)
+		$x = $image->Write("$dest/$fhbase\_lg.jpg");
+		warn "$x" if "$x";
 
 		#save medium
 		$x = $image->Resize(geometry=>$med."x".$med);
@@ -89,7 +95,7 @@ sub main {
 		$x = $image->Write("$dest/$fh\_med.jpg");
 		warn "$x" if "$x";
 		#save to eci
-		$x = $image->Write("$eci/$fh".".jpg");
+		$x = $image->Write("$eci/$fhbase".".jpg");
 		warn "$x" if "$x";
 		#outputs something we can manually make into a swatch
 		$x = $image->Write("$dest/$fh\_sw.jpg");
@@ -98,7 +104,7 @@ sub main {
 		#save thumbnail
 		$x = $image->Sample(geometry=>$t."x".$t);
 		warn "$x" if "$x";
-		$x = $image->Write("$eci/$fh"."t.jpg");
+		$x = $image->Write("$eci/$fhbase"."t.jpg");
 		warn "$x" if "$x";
 	}
 }
