@@ -53,13 +53,20 @@ sub main {
 		$image = Image::Magick->new;
 		$x = $image->Read($path);
 
+		#flatten
+		$x = $image->Set(alpha=>'Remove');
+		warn "$x" if "$x";
+
 		#set to 72ppi resolution
 		$x = $image->Set(density=>'72x72');
 		warn "$x" if "$x";
 		
 		#set color profile to RGB
-		$x = $image->Quantize(colorspace=>'RGB');
-		warn "$x" if "$x";
+		my $colorspace = $image->Get('colorspace');
+		if( $colorspace eq 'CMYK' ) {
+			$x = $image->Quantize(colorspace=>'RGB');
+			warn "$x" if "$x";
+		}
 
 		#get width/height, ratio and reverse-ratio
 		my $ww = $image->Get('width');
@@ -67,18 +74,13 @@ sub main {
 		my $ratio = $ww/$hh;
 		my $rratio = $hh/$ww;
 
-		if( $ratio < 1 ) {
-			$x = $image->Sample(geometry=>$lg."x".$lg);
-			warn "$x" if "$x";
-			$x = $image->Extent(geometry=>$lg."x".$lg, gravity=>"Center", background=>"#ffffff");
-			warn "$x" if "$x";
-		} elsif ( $ratio > 1 ) {
-			$x = $image->Sample(geometry=>$lg."x".$lg);
+		if( $ratio != 1 ) {
+			$x = $image->Resize(geometry=>$lg."x".$lg);
 			warn "$x" if "$x";
 			$x = $image->Extent(geometry=>$lg."x".$lg, gravity=>"Center", background=>"#ffffff");
 			warn "$x" if "$x";
 		} else {
-			$x = $image->Sample(geometry=>$lg."x".$lg);
+			$x = $image->Resize(geometry=>$lg."x".$lg);
 			warn "$x" if "$x";
 		}
 
@@ -102,7 +104,7 @@ sub main {
 		warn "$x" if "$x";
 
 		#save thumbnail
-		$x = $image->Sample(geometry=>$t."x".$t);
+		$x = $image->Resize(geometry=>$t."x".$t);
 		warn "$x" if "$x";
 		$x = $image->Write("$eci/$fhbase"."t.jpg");
 		warn "$x" if "$x";
