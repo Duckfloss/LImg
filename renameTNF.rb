@@ -3,10 +3,13 @@
 # in The North Face's style names and renames
 # them in RPro's style.
 #
-# You'll need to create a CSV with three
-# columns: pf_id,desc,attr,color
-# pf_id is the 16-character RPro item code
-# desc is TNF's 4-char item and 3-char color code
+# You'll need a CSV with four columns:
+# * style_sid
+# * desc_2
+# * attr
+# * color
+# style_sid is the 16-character RPro item code
+# desc_2 is TNF's 4-char item and 3-char color code
 # attr is our color code (for mapping)
 # color is the actual color style name
 
@@ -14,7 +17,6 @@ require 'csv'
 
 $csv_file = "C:/Documents and Settings/pos/desktop/converttable.csv"
 
-#$img_dir = "R:/RETAIL/IMAGES/4Web"
 $img_dir = "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets"
 
 Dir.chdir($img_dir)
@@ -29,9 +31,9 @@ def build_converter(csv_data)
 		else
 			color = ""
 		end
-		desc = row[:desc].gsub("-","_")
-		pf_id = row[:pf_id]
-		$converter["#{desc}"] = { :pf_id => "#{pf_id}", :color => "#{color}" }
+		desc_2 = row[:desc_2].gsub("-","_")
+		style_sid = row[:style_sid]
+		$converter["#{desc_2}"] = { :style_sid => "#{style_sid}", :color => "#{color}" }
 	end
 end
 
@@ -48,7 +50,7 @@ def main
 			code = file.match(/^.{8}/)
 			this_converter = $converter["#{code}"]
 			if this_converter
-				newname = "#{this_converter[:pf_id]}"
+				newname = "#{this_converter[:style_sid]}"
 				if this_converter[:color].length > 1
 					newname << "_#{this_converter[:color]}"
 				end
@@ -62,6 +64,6 @@ def main
 	return nil
 end
 
-puts "It works"
+puts "loaded . . ."
 
 #main
