@@ -62,5 +62,6 @@ def main
 	return nil
 end
 
+puts "It works"
 
 #main
