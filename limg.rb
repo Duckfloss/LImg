@@ -1,6 +1,14 @@
 #!/usr/bin/env ruby
 
 # This is the Lee's image parser script.
+#			-h, --help, Prints help text
+#			-v, --verbose, Verbose
+#			-e, --eci, Only parse pic(s) to ECI's image directory
+#			--source SOURCE, Sets source file or directory
+#			--dest DEST, Sets destination directory
+#			--size WXH, Sets custom output size
+#			-f, --format NAME, Select a single output size
+#				(t,sw,med,lg)
 
 require 'optparse'
 require 'ostruct'
@@ -92,12 +100,12 @@ class Image_Chopper
 	FORMATS = {
 		"lg"=>1050,
 		"med"=>350,
-		"sw"=>350, # this is temporary til I figure out how to automate
+		"sw"=>350, # this is temporary til I figure out how to automate it
 		"t"=>100
 	}
 
 	def initialize(options)
-		# Default destination directory
+		# Default destination directories
 		dest = "R:/RETAIL/IMAGES/4Web"
 		eci = "R:/RETAIL/RPRO/Images/Inven"
 		# basearray lets us avoid duplicate output
@@ -121,42 +129,47 @@ class Image_Chopper
 			puts "Source: #{options.source.values[0]}\n"
 		end
 
+		# DESTINATION
+		if options.dest
+			dest = options.dest
+		end
+		# Reporting
+		if options.verbose
+			puts "Destination: #{dest}\n"
+		end
+
+
 		# Image processing loop
 		images.each do |image|
 			# register output array
 			$outputs = []
 
 			# Parse filename
-			filename = image.slice(File.dirname(image).length+1..-1)
+			if options.source.key?("file")
+				filename = image.slice(File.dirname(image).length+1..-1)
+			else
+				filename = image
+				image = "#{options.source['dir']}/#{image}"
+			end
 			filebase = filename.slice(/^[A-Z]{16}/)
 			fileattr = filename.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
 			if !$basearray.include?(filebase)
 				$basearray << filebase
 			end
 
-			# DESTINATION
-			if options.dest
-				dest = options.dest
-			end
-			# Reporting
-			if options.verbose
-				puts "Destination: #{dest}\n"
-			end
-
 			# Begin reporting
-			$report = "\t#{filename}"
+			$report = "#{filename}"
 
 			# ECI
 			if options.eci
 				# Reporting
 				if options.verbose
-					puts "ECI parsing is on\n"
+					#puts "ECI parsing is on\n"
 				end
 				if !$basearray.include?(filebase)
-					$report << "\n\t  exists in ECI directory"
+					#$report << "\n\t  exists in ECI directory"
 					break
 				else
-					$outputs << { size: 1050, dest: dest, name: "#{filebase}_lg.jpg" }
 					$outputs << { size: 350, dest: eci, name: "#{filebase}.jpg" }
 					$outputs << { size: 100, dest: eci, name: "#{filebase}t.jpg" }
 				end
@@ -168,7 +181,14 @@ class Image_Chopper
 					options.format = FORMATS.keys
 				end
 				options.format.each do |format|
-					$outputs << { size: FORMATS[format], dest: dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
+					if fileattr.nil?
+						$outputs << { size: FORMATS[format], dest: dest, name: "#{filebase}_#{format}.jpg" }
+					else
+						$outputs << { size: FORMATS[format], dest: dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
+					end
+				end
+				if !fileattr.nil?
+					$outputs << { size: 1050, dest: dest, name: "#{filebase}_lg.jpg" }
 				end
 			end # format loop
 
@@ -178,17 +198,22 @@ class Image_Chopper
 
 			# Preformat imgage
 			image = preformat(image)
-			# Chop up images
+
+			# Chop up image
 			$outputs.each do |output|
-				ximg = resize( image,output[:size] )
-				$report << "\n\t  Resized to #{output[:size]}x#{output[:size]}"
-				write_file(ximg, "#{output[:dest]}/#{output[:name]}")
-				$report << "\n\t  Saved as: #{output[:name]}"
+				imgout = resize( image,output[:size] )
+				#$report << "\n\t  Resized to #{output[:size]}x#{output[:size]}"
+				write_file(imgout, "#{output[:dest]}/#{output[:name]}")
+				if output[:dest] == "R:/RETAIL/RPRO/Images/Inven"
+					$report << "\n\tSaved to ECI: #{output[:name]}"
+				else
+					$report << "\n\tSaved to dest: #{output[:name]}"
+				end
 			end
 
 			# Reporting
 			if options.verbose
-				puts "\t################################\n"
+				puts "\n\n"
 				puts $report << "\n"
 			end
 		end # image loop
@@ -196,7 +221,7 @@ class Image_Chopper
 
 	def preformat(img)
 		# Create new image object and set defaults
-		cat = ImageList.new($test) do
+		cat = ImageList.new(img) do
 			self.background_color = "#ffffff"
 			self.gravity = CenterGravity
 		end
@@ -204,13 +229,13 @@ class Image_Chopper
 		# If the image is CMYK, change it to RGB
 		color_profile = "C:/WINDOWS/system32/spool/drivers/color/sRGB Color Space Profile.icm"
 		if cat.colorspace == Magick::CMYKColorspace
-			$report << "\n\t  Colors: #{cat.colorspace} -> #{color_profile}"
+			#$report << "\n\t  Colors: #{cat.colorspace} -> #{color_profile}"
 			cat = cat.add_profile(color_profile)
 		end
 
 		# If the image has alpha channel transparency, fill it with background color
 		if cat.alpha?
-			$report << "\n\t  Alpha: Transparent -> #{cat.background_color}"
+			#$report << "\n\t  Alpha: Transparent -> #{cat.background_color}"
 			cat.alpha(BackgroundAlphaChannel)
 		end
 
@@ -219,11 +244,11 @@ class Image_Chopper
 		img_h = cat.rows
 		ratio = img_w.to_f/img_h.to_f
 		if ratio < 1
-			$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_h}x#{img_h}"
+			#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_h}x#{img_h}"
 			x = img_h/2-img_w/2
 			cat = cat.extent(img_h,img_h,x=-x,y=0)
 		elsif ratio > 1
-			$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_w}x#{img_w}"
+			#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_w}x#{img_w}"
 			y = img_w/2-img_h/2
 			cat = cat.extent(img_w,img_w,x=0,y=-y)
 		end
@@ -243,63 +268,11 @@ class Image_Chopper
 
 end
 
-$test = "C:/Documents and Settings/pos/Desktop/test/in/PAIEADNFAGBOMIOE_gray.png"
-$tgt = "C:/Documents and Settings/pos/Desktop/test/in/PAIEADNFAGBOMIOE_grayOUT.jpg"
-
-
-if File.exist?($tgt)
-	File.delete($tgt)
-end
-
 
 if __FILE__ == $0
 
 options = Parser.parse(ARGV)
-puts options.to_h
+#puts options.to_h
 Image_Chopper.new(options)
 
 end
-
-
-
-=begin
-			opt.on("-i", "--inplace [EXTENSION]", "Edit ARGV files in place", " (make backup if EXTENSION supplied)") do |ext|
-				options.inplace = true
-				options.extension = ext || ''
-				options.extension.sub!(/\A\.?(?=.)/, ".")
-			end
-
-			opt.on("--delay N", Float, "Delay N seconds before executing") do |n|
-				options.delay = n
-			end
-
-			opt.on("-t", "--time [TIME]", Time, "Begin execution at given time") do |time|
-				options.time = time
-			end
-
-			opt.on("-F", "--irs [OCTAL]", OptionParser::OctalInteger, "Specify record separator (default \\0)") do |rs|
-				options.record_separator = rs
-			end
-
-			opt.on("--list x,y,z", Array, "Sample list of arguments") do |list|
-				options.list = list
-			end
-
-			code_list = (CODE_ALIASES.keys + CODES).join(',')
-			opt.on("--code CODE", CODES, CODE_ALIASES, "Select encoding", " (#{code_list})") do |encoding|
-				options.encoding = encoding
-			end
-
-			opt.on("--type [TYPE]", [:text, :binary, :auto], "Select transfer type (text,binary,auto)") do |t|
-				options.tx = t
-			end
-=end
-
-#			-h, --help, Prints help text
-#			-v, --verbose, Verbose
-#			-e, --eci, Only parse pic(s) to ECI's image directory
-#			--source SOURCE, Sets source file or directory
-#			--dest DEST, Sets destination directory
-#			--size WXH, Sets custom output size
-#			-f, --format NAME, Select a single output size
-#				(t,sw,med,lg)
