@@ -196,6 +196,12 @@ class Image_Chopper
 			$outputs.sort! { |x,y| x[:size] <=> y[:size] }
 			$outputs.reverse!
 
+			# Create new image object and set defaults
+			image = ImageList.new(image) do
+				self.background_color = "#ffffff"
+				self.gravity = CenterGravity
+			end
+
 			# Preformat imgage
 			image = preformat(image)
 
@@ -216,16 +222,12 @@ class Image_Chopper
 				puts "\n\n"
 				puts $report << "\n"
 			end
+			
+			image = nil
 		end # image loop
 	end
 
-	def preformat(img)
-		# Create new image object and set defaults
-		cat = ImageList.new(img) do
-			self.background_color = "#ffffff"
-			self.gravity = CenterGravity
-		end
-
+	def preformat(cat)
 		# If the image is CMYK, change it to RGB
 		color_profile = "C:/WINDOWS/system32/spool/drivers/color/sRGB Color Space Profile.icm"
 		if cat.colorspace == Magick::CMYKColorspace
