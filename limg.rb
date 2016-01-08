@@ -16,6 +16,9 @@ require 'RMagick'
 include Magick
 require 'pry'
 
+# Default destination directories
+$dest = "R:/RETAIL/IMAGES/4Web"
+$eci = "R:/RETAIL/RPRO/Images/Inven"
 
 class Parser
 
@@ -96,152 +99,135 @@ class Parser
 	end
 end
 
-class Image_Chopper
+def chopit(image,options)
 
-	FORMATS = {
+#TEMP
+options.verbose = true
+
+	formats = {
 		"lg"=>1050,
 		"med"=>350,
 		"sw"=>350, # this is temporary til I figure out how to automate it
 		"t"=>100
 	}
 
-	def initialize(options)
-		# basearray lets us avoid duplicate output
-		$basearray = []
+	$basearray = []
+	$outputs = []
 
+	# Parse filename
+	if options.source.key?("file")
+		filename = image.slice(File.dirname(image).length+1..-1)
+	else
+		filename = image
+		image = "#{options.source['dir']}/#{image}"
+	end
+	filebase = filename.slice(/^[A-Z]{16}/)
+	fileattr = filename.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
+	if !$basearray.include?(filebase)
+		$basearray << filebase
+	end
 
+	# Begin reporting
+	$report = "#{filename}"
 
-		# Image processing loop
-		images.each do |image|
-			# register output array
-			$outputs = []
+	# ECI
+	if options.eci
+		# Reporting
+		if options.verbose
+			#puts "ECI parsing is on\n"
+		end
+		if !$basearray.include?(filebase)
+			#$report << "\n\t  exists in ECI directory"
+			#break
+		else
+			$outputs << { size: 350, dest: $eci, name: "#{filebase}.jpg" }
+			$outputs << { size: 100, dest: $eci, name: "#{filebase}t.jpg" }
+		end
+	end
 
-			# Parse filename
-			if options.source.key?("file")
-				filename = image.slice(File.dirname(image).length+1..-1)
+	# FORMAT
+	if options.format
+		if options.format.include?("all")
+			options.format = formats.keys
+		end
+		options.format.each do |format|
+			if fileattr.nil?
+				$outputs << { size: formats[format], dest: $dest, name: "#{filebase}_#{format}.jpg" }
 			else
-				filename = image
-				image = "#{options.source['dir']}/#{image}"
+				$outputs << { size: formats[format], dest: $dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
 			end
-			filebase = filename.slice(/^[A-Z]{16}/)
-			fileattr = filename.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
-			if !$basearray.include?(filebase)
-				$basearray << filebase
-			end
+		end
+		if !fileattr.nil?
+			$outputs << { size: 1050, dest: $dest, name: "#{filebase}_lg.jpg" }
+		end
+	end # format loop
 
-			# Begin reporting
-			$report = "#{filename}"
+	# Sort the $outputs array by size
+	$outputs.sort! { |x,y| x[:size] <=> y[:size] }
+	$outputs.reverse!
 
-			# ECI
-			if options.eci
-				# Reporting
-				if options.verbose
-					#puts "ECI parsing is on\n"
-				end
-				if !$basearray.include?(filebase)
-					#$report << "\n\t  exists in ECI directory"
-					break
-				else
-					$outputs << { size: 350, dest: eci, name: "#{filebase}.jpg" }
-					$outputs << { size: 100, dest: eci, name: "#{filebase}t.jpg" }
-				end
-			end
-
-			# FORMAT
-			if options.format
-				if options.format.include?("all")
-					options.format = FORMATS.keys
-				end
-				options.format.each do |format|
-					if fileattr.nil?
-						$outputs << { size: FORMATS[format], dest: dest, name: "#{filebase}_#{format}.jpg" }
-					else
-						$outputs << { size: FORMATS[format], dest: dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
-					end
-				end
-				if !fileattr.nil?
-					$outputs << { size: 1050, dest: dest, name: "#{filebase}_lg.jpg" }
-				end
-			end # format loop
-
-			# Sort the $outputs array by size
-			$outputs.sort! { |x,y| x[:size] <=> y[:size] }
-			$outputs.reverse!
-
-			# Create new image object and set defaults
-			image = ImageList.new(image) do
-				self.background_color = "#ffffff"
-				self.gravity = CenterGravity
-			end
-
-			# Preformat imgage
-			image = preformat(image)
-
-			# Chop up image
-			$outputs.each do |output|
-				imgout = resize( image,output[:size] )
-				#$report << "\n\t  Resized to #{output[:size]}x#{output[:size]}"
-				write_file(imgout, "#{output[:dest]}/#{output[:name]}")
-				if output[:dest] == "R:/RETAIL/RPRO/Images/Inven"
-					$report << "\n\tSaved to ECI: #{output[:name]}"
-				else
-					$report << "\n\tSaved to dest: #{output[:name]}"
-				end
-			end
-
-			# Reporting
-			if options.verbose
-				puts "\n\n"
-				puts $report << "\n"
-			end
-			
-			image = nil
-		end # image loop
+	# Create new image object and set defaults
+	image = ImageList.new(image) do
+		self.background_color = "#ffffff"
+		self.gravity = CenterGravity
 	end
 
-	def preformat(cat)
-		# If the image is CMYK, change it to RGB
-		color_profile = "C:/WINDOWS/system32/spool/drivers/color/sRGB Color Space Profile.icm"
-		if cat.colorspace == Magick::CMYKColorspace
-			#$report << "\n\t  Colors: #{cat.colorspace} -> #{color_profile}"
-			cat = cat.add_profile(color_profile)
-		end
-
-		# If the image has alpha channel transparency, fill it with background color
-		if cat.alpha?
-			#$report << "\n\t  Alpha: Transparent -> #{cat.background_color}"
-			cat.alpha(BackgroundAlphaChannel)
-		end
-
-		# If the image size isn't a square, make it a square
-		img_w = cat.columns
-		img_h = cat.rows
-		ratio = img_w.to_f/img_h.to_f
-		if ratio < 1
-			#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_h}x#{img_h}"
-			x = img_h/2-img_w/2
-			cat = cat.extent(img_h,img_h,x=-x,y=0)
-		elsif ratio > 1
-			#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_w}x#{img_w}"
-			y = img_w/2-img_h/2
-			cat = cat.extent(img_w,img_w,x=0,y=-y)
-		end
-		cat
+	# Preformat imgage
+	# If the image is CMYK, change it to RGB
+	color_profile = "C:/WINDOWS/system32/spool/drivers/color/sRGB Color Space Profile.icm"
+	if image.colorspace == Magick::CMYKColorspace
+		#$report << "\n\t  Colors: #{image.colorspace} -> #{color_profile}"
+		image = image.add_profile(color_profile)
 	end
 
-	def resize(cat,size)
-		cat = cat.resize(size,size)
+	# If the image has alpha channel transparency, fill it with background color
+	if image.alpha?
+		#$report << "\n\t  Alpha: Transparent -> #{image.background_color}"
+		image.alpha(BackgroundAlphaChannel)
 	end
 
-	def write_file(cat,dest)
-		cat.write(dest) do
-			self.quality = 80
-			self.density = "72x72"
+	# If the image size isn't a square, make it a square
+	img_w = image.columns
+	img_h = image.rows
+	ratio = img_w.to_f/img_h.to_f
+	if ratio < 1
+		#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_h}x#{img_h}"
+		x = img_h/2-img_w/2
+		image = image.extent(img_h,img_h,x=-x,y=0)
+	elsif ratio > 1
+		#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_w}x#{img_w}"
+		y = img_w/2-img_h/2
+		image = image.extent(img_w,img_w,x=0,y=-y)
+	end
+
+	# Chop up image
+	$outputs.each do |output|
+		# resize(image,size)
+		imgout = image.resize(output[:size],output[:size])
+		#$report << "\n\t  Resized to #{output[:size]}x#{output[:size]}"
+		write_file(imgout, "#{output[:dest]}/#{output[:name]}")
+		if output[:dest] == "R:/RETAIL/RPRO/Images/Inven"
+			$report << "\n\tSaved to ECI: #{output[:name]}"
+		else
+			$report << "\n\tSaved to dest: #{output[:name]}"
 		end
 	end
+
+	# Reporting
+	if options.verbose
+		puts "\n\n"
+		puts $report << "\n"
+	end
+
 
 end
 
+def write_file(image,dest)
+	image.write(dest) do
+		self.quality = 80
+		self.density = "72x72"
+	end
+end
 
 def piclist(options)
 	# SOURCE
@@ -256,17 +242,14 @@ def piclist(options)
 	else
 		raise "error" #error
 	end
-end
-
-def validate(options)
-	# Default destination directories
-	dest = "R:/RETAIL/IMAGES/4Web"
-	eci = "R:/RETAIL/RPRO/Images/Inven"
-
 	# Reporting
 	if options.verbose
 		puts "Source: #{options.source.values[0]}\n"
 	end
+	images
+end
+
+def validate(options)
 
 	# DESTINATION
 	if options.dest
@@ -276,21 +259,20 @@ def validate(options)
 	if options.verbose
 		puts "Destination: #{dest}\n"
 	end
-
-
+	options
 end
 
-options = validate(Parser.parse(ARGV)); $options = options
-list = piclist(options); $list = list
+
 
 
 if __FILE__ == $0
-
-	options = Parser.parse(ARGV)
+	options = validate(Parser.parse(ARGV))
 	list = piclist(options)
 
+	# Image processing loop
+	while !list.empty?
+		image = list.shift
+		chopit(image,options)
 
-	#puts options.to_h
-	#Image_Chopper.new(options)
-
+	end # Image processing loop
 end
