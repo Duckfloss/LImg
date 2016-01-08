@@ -14,6 +14,7 @@ require 'optparse'
 require 'ostruct'
 require 'RMagick'
 include Magick
+require 'pry'
 
 
 class Parser
@@ -105,38 +106,9 @@ class Image_Chopper
 	}
 
 	def initialize(options)
-		# Default destination directories
-		dest = "R:/RETAIL/IMAGES/4Web"
-		eci = "R:/RETAIL/RPRO/Images/Inven"
 		# basearray lets us avoid duplicate output
 		$basearray = []
 
-		# SOURCE
-		if options.source.nil? 
-			options.source = { "dir" => "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets" }
-		end
-		if options.source.key?("dir")
-			images = Dir.entries(options.source["dir"])
-			images.keep_if { |file| file =~ /\.jpg$|\.png$|\.jpeg$|\.gif$/ }
-		elsif options.source.key?("file")
-			images = [ options.source["file"] ]
-		else
-			puts "error" #error
-		end
-
-		# Reporting
-		if options.verbose
-			puts "Source: #{options.source.values[0]}\n"
-		end
-
-		# DESTINATION
-		if options.dest
-			dest = options.dest
-		end
-		# Reporting
-		if options.verbose
-			puts "Destination: #{dest}\n"
-		end
 
 
 		# Image processing loop
@@ -271,10 +243,54 @@ class Image_Chopper
 end
 
 
+def piclist(options)
+	# SOURCE
+	if options.source.nil? 
+		options.source = { "dir" => "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets" }
+	end
+	if options.source.key?("dir")
+		images = Dir.entries(options.source["dir"])
+		images.keep_if { |file| file =~ /\.jpg$|\.png$|\.jpeg$|\.gif$/ }
+	elsif options.source.key?("file")
+		images = [ options.source["file"] ]
+	else
+		raise "error" #error
+	end
+end
+
+def validate(options)
+	# Default destination directories
+	dest = "R:/RETAIL/IMAGES/4Web"
+	eci = "R:/RETAIL/RPRO/Images/Inven"
+
+	# Reporting
+	if options.verbose
+		puts "Source: #{options.source.values[0]}\n"
+	end
+
+	# DESTINATION
+	if options.dest
+		dest = options.dest
+	end
+	# Reporting
+	if options.verbose
+		puts "Destination: #{dest}\n"
+	end
+
+
+end
+
+options = validate(Parser.parse(ARGV)); $options = options
+list = piclist(options); $list = list
+
+
 if __FILE__ == $0
 
-options = Parser.parse(ARGV)
-#puts options.to_h
-Image_Chopper.new(options)
+	options = Parser.parse(ARGV)
+	list = piclist(options)
+
+
+	#puts options.to_h
+	#Image_Chopper.new(options)
 
 end
