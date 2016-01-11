@@ -19,6 +19,7 @@ require 'pry'
 # Default destination directories
 $dest = "R:/RETAIL/IMAGES/4Web"
 $eci = "R:/RETAIL/RPRO/Images/Inven"
+$basearray = []
 
 class Parser
 
@@ -111,7 +112,6 @@ options.verbose = true
 		"t"=>100
 	}
 
-	$basearray = []
 	$outputs = []
 
 	# Parse filename
@@ -132,14 +132,7 @@ options.verbose = true
 
 	# ECI
 	if options.eci
-		# Reporting
-		if options.verbose
-			#puts "ECI parsing is on\n"
-		end
-		if !$basearray.include?(filebase)
-			#$report << "\n\t  exists in ECI directory"
-			#break
-		else
+		if $basearray.include?(filebase)
 			$outputs << { size: 350, dest: $eci, name: "#{filebase}.jpg" }
 			$outputs << { size: 100, dest: $eci, name: "#{filebase}t.jpg" }
 		end
@@ -176,13 +169,11 @@ options.verbose = true
 	# If the image is CMYK, change it to RGB
 	color_profile = "C:/WINDOWS/system32/spool/drivers/color/sRGB Color Space Profile.icm"
 	if image.colorspace == Magick::CMYKColorspace
-		#$report << "\n\t  Colors: #{image.colorspace} -> #{color_profile}"
 		image = image.add_profile(color_profile)
 	end
 
 	# If the image has alpha channel transparency, fill it with background color
 	if image.alpha?
-		#$report << "\n\t  Alpha: Transparent -> #{image.background_color}"
 		image.alpha(BackgroundAlphaChannel)
 	end
 
@@ -191,11 +182,9 @@ options.verbose = true
 	img_h = image.rows
 	ratio = img_w.to_f/img_h.to_f
 	if ratio < 1
-		#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_h}x#{img_h}"
 		x = img_h/2-img_w/2
 		image = image.extent(img_h,img_h,x=-x,y=0)
 	elsif ratio > 1
-		#$report << "\n\t  Size: #{img_w}x#{img_h} -> #{img_w}x#{img_w}"
 		y = img_w/2-img_h/2
 		image = image.extent(img_w,img_w,x=0,y=-y)
 	end
@@ -204,22 +193,27 @@ options.verbose = true
 	$outputs.each do |output|
 		# resize(image,size)
 		imgout = image.resize(output[:size],output[:size])
-		#$report << "\n\t  Resized to #{output[:size]}x#{output[:size]}"
 		write_file(imgout, "#{output[:dest]}/#{output[:name]}")
 		if output[:dest] == "R:/RETAIL/RPRO/Images/Inven"
 			$report << "\n\tSaved to ECI: #{output[:name]}"
 		else
 			$report << "\n\tSaved to dest: #{output[:name]}"
 		end
+		
+		# Killin it
+		imgout.destroy!
 	end
 
 	# Reporting
 	if options.verbose
 		puts "\n\n"
 		puts $report << "\n"
+		$counter -= 1
+		puts "#{$counter} images left to parse\n"
 	end
 
-
+	# Killin it (Part 2)
+	image.destroy!
 end
 
 def write_file(image,dest)
@@ -241,10 +235,6 @@ def piclist(options)
 		images = [ options.source["file"] ]
 	else
 		raise "error" #error
-	end
-	# Reporting
-	if options.verbose
-		puts "Source: #{options.source.values[0]}\n"
 	end
 	images
 end
@@ -268,11 +258,23 @@ end
 if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
 	list = piclist(options)
+	total = list.length
+	$counter = total
+
+	# Input report
+	inreport = "Parsing "
+	if options.source.keys[0] == "dir"
+		inreport << "#{$counter} files in "
+	end
+	inreport << "#{options.source.values[0]}\n"
+	puts inreport
 
 	# Image processing loop
 	while !list.empty?
 		image = list.shift
 		chopit(image,options)
-
 	end # Image processing loop
+
+	# Output report
+	outreport = "#{total} images processed."
 end
