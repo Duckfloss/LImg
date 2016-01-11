@@ -102,9 +102,6 @@ end
 
 def chopit(image,options)
 
-#TEMP
-options.verbose = true
-
 	formats = {
 		"lg"=>1050,
 		"med"=>350,
@@ -277,4 +274,5 @@ if __FILE__ == $0
 
 	# Output report
 	outreport = "#{total} images processed."
+	puts outreport
 end
