@@ -14,6 +14,7 @@ require 'optparse'
 require 'ostruct'
 require 'RMagick'
 include Magick
+require 'pry'
 
 # Default destination directories
 $dest = "R:/RETAIL/IMAGES/4Web"
@@ -77,7 +78,7 @@ class Parser
 
 			opt.on("-fFORMAT", "--format FORMAT", Array, "Select output formats", "  accepts comma-separated string", "  output sizes are t,sw,med,lg", "  default is \"all\"") do |formats|
 				formats.each do |format|
-					if $formats.index(format.downcase).nil?
+					if !$formats.has_key?(format)
 						puts "error" #error
 						exit
 					end
@@ -202,12 +203,13 @@ def chopit(image,options)
 	if options.verbose
 		puts "\n\n"
 		puts $report << "\n"
-		$counter -= 1
-		puts "#{$counter} images left to parse\n"
+		$total -= 1
+		puts "#{$total} images left to parse\n"
 	end
 
 	# Killin it (Part 2)
 	image.destroy!
+	CG.start
 end
 
 def write_file(image,dest)
@@ -217,16 +219,16 @@ def write_file(image,dest)
 	end
 end
 
-def piclist(options)
+def piclist(source)
 	# SOURCE
-	if options.source.nil? 
-		options.source = { "dir" => "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets" }
+	if source.nil? 
+		source = { "dir" => "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets" }
 	end
-	if options.source.key?("dir")
-		images = Dir.entries(options.source["dir"])
+	if source.key?("dir")
+		images = Dir.entries(source["dir"])
 		images.keep_if { |file| file =~ /\.jpg$|\.png$|\.jpeg$|\.gif$/ }
-	elsif options.source.key?("file")
-		images = [ options.source["file"] ]
+	elsif source.key?("file")
+		images = [ source["file"] ]
 	else
 		raise "error" #error
 	end
@@ -234,7 +236,6 @@ def piclist(options)
 end
 
 def validate(options)
-
 	# DESTINATION
 	if options.dest
 		dest = options.dest
@@ -246,19 +247,16 @@ def validate(options)
 	options
 end
 
-
-
-
 if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
-	list = piclist(options)
-	total = list.length
-	$counter = total
+	list = piclist(options.source)
+	$total = list.length
 
 	# Input report
 	inreport = "Parsing "
+binding.pry
 	if options.source.keys[0] == "dir"
-		inreport << "#{$counter} files in "
+		inreport << "#{$total} files in "
 	end
 	inreport << "#{options.source.values[0]}\n"
 	puts inreport
