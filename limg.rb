@@ -34,7 +34,7 @@ class Parser
 		options = OpenStruct.new
 		options.format = ["all"]
 		options.eci = false
-		options.source = nil
+		options.source = "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets"
 		options.dest = nil
 		options.verbose = false
 
@@ -44,10 +44,7 @@ class Parser
 			opt.separator "Options:"
 
 			opt.on("--source SOURCE", "Sets source file or directory", "  default is Downloads/WebAssets") do |source|
-				# Validate source
-				if source.nil?
-					options.source = "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets"
-				elsif File.exist?(source)
+				if !File.exist?(source)
 						options.source = source
 				else
 					puts "source error" #error
@@ -224,14 +221,11 @@ end
 
 def piclist(source)
 	# SOURCE
-	if source.nil? 
-		source = { "dir" => "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets" }
-	end
-	if source.key?("dir")
-		images = Dir.entries(source["dir"])
+	if File.directory?(source)
+		images = Dir.entries(source)
 		images.keep_if { |file| file =~ /\.jpg$|\.png$|\.jpeg$|\.gif$/ }
-	elsif source.key?("file")
-		images = [ source["file"] ]
+	elsif File.file(source)
+		images = [ source ]
 	else
 		raise "piclist error" #error
 	end
@@ -262,7 +256,6 @@ if __FILE__ == $0
 
 	# Input report
 	inreport = "Parsing "
-binding.pry
 	if options.source.keys[0] == "dir"
 		inreport << "#{$total} files in "
 	end
