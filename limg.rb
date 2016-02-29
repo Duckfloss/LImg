@@ -108,8 +108,15 @@ end
 def chopit(image,options)
 
 	$outputs = []
+
 	# Parse filename
-	image_w_path = File.expand_path(image)
+	if File.directory?(options.source)
+		path = options.source
+	else
+		path = File.dirname(image)
+		image = File.basename(image)
+	end
+	image_w_path = path + "/" + image
 	filebase = image.slice(/^[A-Z]{16}/)
 	fileattr = image.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
 	if !$basearray.include?(filebase)
@@ -193,6 +200,10 @@ def chopit(image,options)
 		imgout.destroy!
 	end
 
+	# Killin it (Part 2)
+	image.destroy!
+	GC.start
+
 	# Reporting
 	if options.verbose
 		puts "\n\n"
@@ -200,10 +211,6 @@ def chopit(image,options)
 		$total -= 1
 		puts "#{$total} images left to parse\n"
 	end
-
-	# Killin it (Part 2)
-	image.destroy!
-	CG.start
 end
 
 def write_file(image,dest)
@@ -249,7 +256,7 @@ end
 if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
 	list = piclist(options.source)
-#	source = 
+	total = list.length
 	$total = list.length
 
 	# Input report
