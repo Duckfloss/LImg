@@ -14,16 +14,20 @@ require 'optparse'
 require 'ostruct'
 require 'RMagick'
 include Magick
-require 'pry'
 
 # Default destination directories
 $dest = "R:/RETAIL/IMAGES/4Web"
 $eci = "R:/RETAIL/RPRO/Images/Inven"
 $basearray = []
+$formats = {
+		"lg"=>1050,
+		"med"=>350,
+		"sw"=>350, # this is temporary til I figure out how to automate it
+		"t"=>100
+	}
+
 
 class Parser
-
-	FORMATS = ["all","t","med","lg","sw"]
 
 	def self.parse(args)
 		options = OpenStruct.new
@@ -73,7 +77,7 @@ class Parser
 
 			opt.on("-fFORMAT", "--format FORMAT", Array, "Select output formats", "  accepts comma-separated string", "  output sizes are t,sw,med,lg", "  default is \"all\"") do |formats|
 				formats.each do |format|
-					if FORMATS.index(format.downcase).nil?
+					if $formats.index(format.downcase).nil?
 						puts "error" #error
 						exit
 					end
@@ -101,13 +105,6 @@ class Parser
 end
 
 def chopit(image,options)
-
-	formats = {
-		"lg"=>1050,
-		"med"=>350,
-		"sw"=>350, # this is temporary til I figure out how to automate it
-		"t"=>100
-	}
 
 	$outputs = []
 
@@ -138,13 +135,13 @@ def chopit(image,options)
 	# FORMAT
 	if options.format
 		if options.format.include?("all")
-			options.format = formats.keys
+			options.format = $formats.keys
 		end
 		options.format.each do |format|
 			if fileattr.nil?
-				$outputs << { size: formats[format], dest: $dest, name: "#{filebase}_#{format}.jpg" }
+				$outputs << { size: $formats[format], dest: $dest, name: "#{filebase}_#{format}.jpg" }
 			else
-				$outputs << { size: formats[format], dest: $dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
+				$outputs << { size: $formats[format], dest: $dest, name: "#{filebase}_#{fileattr}_#{format}.jpg" }
 			end
 		end
 		if !fileattr.nil?
