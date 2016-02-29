@@ -44,7 +44,7 @@ class Parser
 			opt.separator "Options:"
 
 			opt.on("--source SOURCE", "Sets source file or directory", "  default is Downloads/WebAssets") do |source|
-				if !File.exist?(source)
+			if File.exist?(source)
 						options.source = source
 				else
 					puts "source error" #error
@@ -108,22 +108,16 @@ end
 def chopit(image,options)
 
 	$outputs = []
-
 	# Parse filename
-	if options.source.key?("file")
-		filename = image.slice(File.dirname(image).length+1..-1)
-	else
-		filename = image
-		image = "#{options.source['dir']}/#{image}"
-	end
-	filebase = filename.slice(/^[A-Z]{16}/)
-	fileattr = filename.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
+	image_w_path = File.expand_path(image)
+	filebase = image.slice(/^[A-Z]{16}/)
+	fileattr = image.slice(/(?<=\_)([A-Za-z0-9\_]+)(?=\.)/)
 	if !$basearray.include?(filebase)
 		$basearray << filebase
 	end
 
 	# Begin reporting
-	$report = "#{filename}"
+	$report = "#{image}"
 
 	# ECI
 	if options.eci
@@ -155,7 +149,7 @@ def chopit(image,options)
 	$outputs.reverse!
 
 	# Create new image object and set defaults
-	image = ImageList.new(image) do
+	image = ImageList.new(image_w_path) do
 		self.background_color = "#ffffff"
 		self.gravity = CenterGravity
 	end
@@ -224,8 +218,12 @@ def piclist(source)
 	if File.directory?(source)
 		images = Dir.entries(source)
 		images.keep_if { |file| file =~ /\.jpg$|\.png$|\.jpeg$|\.gif$/ }
-	elsif File.file(source)
-		images = [ source ]
+	elsif File.file?(source)
+		if [".jpg", ".png", ".jpeg", ".gif"].include?(File.extname(source))
+			images = [ source ]
+		else
+			raise "piclist error" #error
+		end
 	else
 		raise "piclist error" #error
 	end
@@ -244,22 +242,22 @@ def validate(options)
 	options
 end
 
-ARGV << "-f sw,lg"
-options = validate(Parser.parse(ARGV))
-binding.pry
-
+#ARGV << "--source \"C:/Documents and Settings/pos/My Documents/Downloads/WebAssets/PAIEADAJAPJKNCOO_Lime.jpg\""
+#options = validate(Parser.parse(ARGV))
+#binding.pry
 
 if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
 	list = piclist(options.source)
+#	source = 
 	$total = list.length
 
 	# Input report
 	inreport = "Parsing "
-	if options.source.keys[0] == "dir"
+	if $total > 1
 		inreport << "#{$total} files in "
 	end
-	inreport << "#{options.source.values[0]}\n"
+	inreport << "#{options.source}\n"
 	puts inreport
 
 	# Image processing loop
