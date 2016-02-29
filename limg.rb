@@ -45,16 +45,12 @@ class Parser
 
 			opt.on("--source SOURCE", "Sets source file or directory", "  default is Downloads/WebAssets") do |source|
 				# Validate source
-				if !File.directory?(source)
-					if File.exist?(source)
-						options.source = { "file"=>source }
-					end
+				if source.nil?
+					options.source = "C:/Documents and Settings/pos/My Documents/Downloads/WebAssets"
+				elsif File.exist?(source)
+						options.source = source
 				else
-					options.source = { "dir"=>source }
-				end
-
-				if options.source.nil?
-					puts "error" #error
+					puts "source error" #error
 				end
 			end
 
@@ -62,7 +58,7 @@ class Parser
 
 			opt.on("--dest DEST", "Sets destination directory", "  defaults are R:/RETAIL/IMAGES/4Web", "  and R:/RETAIL/RPRO/Images/Inven") do |dest|
 				if !Dir.exist?(dest)
-					puts "error" #error
+					puts "destination error" #error
 				else
 					options.dest = dest
 				end
@@ -77,12 +73,19 @@ class Parser
 			opt.separator ""
 
 			opt.on("-fFORMAT", "--format FORMAT", Array, "Select output formats", "  accepts comma-separated string", "  output sizes are t,sw,med,lg", "  default is \"all\"") do |formats|
-				formats.each do |format|
-					if !$formats.has_key?(format)
-						puts "error" #error
-						exit
+				if formats == ["all"]
+					formats = $formats.keys
+				else
+					options.format.clear
+					formats.each do |format|
+						format.strip!
+						if !$formats.has_key?(format)
+							puts "format error" #error
+							exit
+						else
+							options.format << format
+						end
 					end
-					options.format = formats
 				end
 			end
 
@@ -230,7 +233,7 @@ def piclist(source)
 	elsif source.key?("file")
 		images = [ source["file"] ]
 	else
-		raise "error" #error
+		raise "piclist error" #error
 	end
 	images
 end
@@ -246,6 +249,11 @@ def validate(options)
 	end
 	options
 end
+
+ARGV << "-f sw,lg"
+options = validate(Parser.parse(ARGV))
+binding.pry
+
 
 if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
