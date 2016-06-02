@@ -253,7 +253,8 @@ end
 #options = validate(Parser.parse(ARGV))
 #binding.pry
 
-if __FILE__ == $0
+def run
+#if __FILE__ == $0
 	options = validate(Parser.parse(ARGV))
 	list = piclist(options.source)
 	total = list.length
